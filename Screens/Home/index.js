@@ -63,11 +63,15 @@ export default function Home({ navigation }) {
         console.log("entrou")
 
         data.map(item => {
-            const temp = dataTemp.filter(itemData => itemData.month === item.month && itemData.year === item.year)
+            const temp = dataTemp.filter(itemData =>
+                itemData.month === item.month &&
+                itemData.year === item.year
+            )
             console.log(temp.length == 0)
             if (temp.length === 0) {
                 setDataTemp(oldArray => [...oldArray, { month: item.month, year: item.year }])
             }
+            setMonth({ month: new Date().getMonth(), year: new Date().getFullYear() })
         })
 
         console.log("saiu")
@@ -100,11 +104,18 @@ export default function Home({ navigation }) {
                     <Picker
                         style={{ backgroundColor: "white", width: "100%" }}
                         selectedValue={month}
+
                         onValueChange={(itemValue) =>
                             setMonth(itemValue)}
                     >
+                        <Picker.Item
+                            key={{ month: new Date().getMonth(), year: new Date().getFullYear() }}
+                            label={`${monthsName.filter(itemMonth => itemMonth.id === new Date().getMonth()).map(itemMonth => { return itemMonth.month })}/${new Date().getFullYear()}`}
+                            value={{ month: new Date().getMonth(), year: new Date().getFullYear() }} />
                         {
-                            dataTemp.sort(function (a, b) { return a.month - b.month }).sort(function (a, b) { return a.year - b.year }).map(item2 => {
+                            dataTemp.filter(item2 =>
+                                item2.month !== new Date().getMonth() && item2.yean !== new Date().getFullYear()
+                            ).sort(function (a, b) { return a.month - b.month }).sort(function (a, b) { return a.year - b.year }).map(item2 => {
                                 return (
                                     <Picker.Item key={item2} label={`${monthsName.filter(itemMonth => itemMonth.id === item2.month).map(itemMonth => { return itemMonth.month })}/${item2.year}`} value={item2} />
                                 )
